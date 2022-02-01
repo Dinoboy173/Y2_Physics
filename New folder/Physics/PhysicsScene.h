@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 class PhysicsObject;
-class Circle;
 
 class PhysicsScene
 {
@@ -31,8 +30,20 @@ public:
 	void SetTimeStep(const float a_timeStep) { m_timeStep = a_timeStep; }
 	float GetTimeStep() const { return m_timeStep; }
 
-	static bool Circle2Circle(PhysicsObject* a_circle, PhysicsObject* a_otherCircle);
+	void CheckForCollisions();
 
+	static bool Plane2Plane(PhysicsObject* a_plane, PhysicsObject* a_otherPlane);
+	static bool Plane2Circle(PhysicsObject* a_plane, PhysicsObject* a_circle);
+	static bool Plane2Box(PhysicsObject* a_plane, PhysicsObject* a_box);
+
+	static bool Circle2Plane(PhysicsObject* a_circle, PhysicsObject* a_plane);
+	static bool Circle2Circle(PhysicsObject* a_circle, PhysicsObject* a_otherCircle);
+	static bool Circle2Box(PhysicsObject* a_circle, PhysicsObject* a_box);
+
+	static bool Box2Plane(PhysicsObject* a_box, PhysicsObject* a_plane);
+	static bool Box2Circle(PhysicsObject* a_box, PhysicsObject* a_circle);
+	static bool Box2Box(PhysicsObject* a_box, PhysicsObject* a_otherBox);
+	
 protected:
 	glm::vec2 m_gravity;
 	float m_timeStep;

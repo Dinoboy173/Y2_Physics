@@ -8,7 +8,8 @@ enum ShapeType
 {
 	PLANE = 0,
 	CIRCLE,
-	AABB
+	BOX,
+	SHAPE_COUNT
 };
 
 class PhysicsObject
@@ -16,10 +17,11 @@ class PhysicsObject
 public:
 	void Update();
 	virtual void FixedUpdate(glm::vec2 a_gravity, float a_timeStep) = 0;
-	virtual void Draw() = 0;
+	virtual void MakeGizmo() = 0;
 	virtual void ResetPosition() {};
-	void MakeGizmo();
 	void Debug();
+
+	ShapeType GetShapeID() { return m_shapeID; }
 
 protected:
 	PhysicsObject(ShapeType a_shapeID) : m_shapeID(a_shapeID) {}

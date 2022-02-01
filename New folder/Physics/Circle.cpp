@@ -28,6 +28,6 @@ bool Circle::CheckCollision(PhysicsObject* a_pOther)
 		if (m_radius + pCircle->m_radius > dist)
 			return true;
 	}
-
+	
 	return false;
 }

@@ -5,6 +5,8 @@
 
 #include "PhysicsScene.h"
 
+class Circle;
+
 class PhysicsApp : public aie::Application {
 public:
 
@@ -23,4 +25,19 @@ protected:
 	aie::Font*			m_font;
 
 	PhysicsScene* m_physicsScene;
+
+	//Circle* rocket;
+	//Circle* rocket2;
+
+	float timer = 0.f;
+	float timerReset = 0.1f;
+
+//====================
+public:
+	Circle* CreateCircle(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass, float a_radius, glm::vec4 a_colour, glm::vec2 a_force);
+	
+	void CreatePlane();
+
+	void CollisionDetectionTest();
+
 };

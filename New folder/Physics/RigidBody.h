@@ -21,6 +21,8 @@ public:
 	float GetRotation() { return m_rotation; }
 	float GetMass() { return m_mass; }
 
+	void SetMass(float a_mass) { m_mass = a_mass; }
+
 protected:
 	glm::vec2 m_positon;
 	glm::vec2 m_velocity;
