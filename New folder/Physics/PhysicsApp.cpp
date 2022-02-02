@@ -47,8 +47,8 @@ bool PhysicsApp::startup() {
 
 	//CollisionDetectionTest();
 	
-	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 1.7f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(11.11f, -20));
-	//Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 1.6f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
+	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(20.f, 20.f));
+	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 4.f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(-20, 20.f));
 
 	return true;
 }

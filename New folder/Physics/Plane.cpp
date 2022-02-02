@@ -11,6 +11,7 @@ Plane::Plane(glm::vec2 a_normal, float a_distToOrigin, glm::vec4 a_colour) : Phy
 	m_distToOrigin = a_distToOrigin;
 	m_colour = a_colour;
 	m_isKinematic = true;
+	m_elasticity = 1;
 }
 
 Plane::Plane() : PhysicsObject(PLANE)
@@ -19,6 +20,7 @@ Plane::Plane() : PhysicsObject(PLANE)
 	m_distToOrigin = 0.f;
 	m_colour = glm::vec4(1, 1, 1, 1);
 	m_isKinematic = true;
+	m_elasticity = 1;
 }
 
 Plane::~Plane()

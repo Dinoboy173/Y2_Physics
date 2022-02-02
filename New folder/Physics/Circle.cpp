@@ -8,6 +8,7 @@ Circle::Circle(glm::vec2 a_position, glm::vec2 a_velocity, float a_mass, float a
 	m_radius = a_radius;
 	m_colour = a_colour;
 	m_isKinematic = false;
+	m_moment = .5f * m_mass * a_radius * a_radius;
 }
 
 Circle::~Circle()
@@ -18,17 +19,4 @@ Circle::~Circle()
 void Circle::MakeGizmo()
 {
 	aie::Gizmos::add2DCircle(m_positon, m_radius, 12, m_colour);
-}
-
-bool Circle::CheckCollision(PhysicsObject* a_pOther)
-{
-	Circle* pCircle = dynamic_cast<Circle*>(a_pOther);
-	if (pCircle != nullptr)
-	{
-		float dist = glm::distance(m_positon, pCircle->m_positon);
-		if (m_radius + pCircle->m_radius > dist)
-			return true;
-	}
-	
-	return false;
 }

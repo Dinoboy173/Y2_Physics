@@ -61,7 +61,7 @@ void PhysicsScene::Draw()
 	}
 }
 
-//=====================================================================================================================================
+//======================================================================================================
 /* Function pointer array for handling out collisions */
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 static fn collisionFunctionArray[] =
@@ -154,9 +154,7 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* a_circle, PhysicsObject* a_other
 
 		if (penetration > 0)
 		{
-
-
-			circle1->ResolveCollision(circle2);
+			circle1->ResolveCollision(circle2, .5f * (circle1->GetPosition() + circle2->GetPosition()));
 
 			return true;
 		}

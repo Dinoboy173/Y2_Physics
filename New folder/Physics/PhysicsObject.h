@@ -22,11 +22,14 @@ public:
 	void Debug();
 
 	ShapeType GetShapeID() { return m_shapeID; }
+	float GetElasticity() { return m_elasticity; }
+
+	void SetElasticity(float a_elsticity) { m_elasticity = a_elsticity; }
 
 protected:
 	PhysicsObject(ShapeType a_shapeID) : m_shapeID(a_shapeID) {}
 
 	ShapeType m_shapeID;
-
+	float m_elasticity;
 	bool m_isKinematic;
 };
