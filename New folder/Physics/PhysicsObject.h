@@ -27,4 +27,6 @@ protected:
 	PhysicsObject(ShapeType a_shapeID) : m_shapeID(a_shapeID) {}
 
 	ShapeType m_shapeID;
+
+	bool m_isKinematic;
 };

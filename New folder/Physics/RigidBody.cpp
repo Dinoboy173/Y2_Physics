@@ -19,37 +19,20 @@ RigidBody::~RigidBody()
 void RigidBody::FixedUpdate(glm::vec2 a_gravity, float a_timeStep)
 {
 	m_positon += GetVelocity() * a_timeStep;
-	ApplyForce(a_gravity * GetMass() * a_timeStep);
+	ApplyForce(a_gravity * GetMass() * a_timeStep, glm::vec2(0, 0));
+
+	m_rotation += m_angularVelocity * a_timeStep;
 }
 
 void RigidBody::ResolveCollision(RigidBody* a_actor2)
 {
-	glm::vec2 normal = glm::normalize(a_actor2->GetPosition() - m_positon);
-	glm::vec2 relativeVel = a_actor2->GetVelocity() - m_velocity;
-
-	float elasticity = 1;
 	
-	// impulse maginitude
-	float j = (glm::dot(-(1 + elasticity) * relativeVel, normal)) /
-		((1 / m_mass) + (1 / a_actor2->GetMass()));
-	
-	glm::vec2 force = normal * j;
-
-	float kePre = GetKineticEnergy();
-	float otherKePre = a_actor2->GetKineticEnergy();
-
-	ApplyForceActor(a_actor2, force);
 }
 
-void RigidBody::ApplyForce(glm::vec2 a_force)
+void RigidBody::ApplyForce(glm::vec2 a_force, glm::vec2 a_contact)
 {
 	m_velocity += a_force / GetMass();
-}
-
-void RigidBody::ApplyForceActor(RigidBody* a_actor2, glm::vec2 a_force)
-{
-	ApplyForce(-a_force);
-	a_actor2->ApplyForce(a_force);
+	m_angularVelocity += (a_force.y * a_contact.x - a_force.x * a_contact.y) / GetMoment();
 }
 
 float RigidBody::GetKineticEnergy()

@@ -47,8 +47,8 @@ bool PhysicsApp::startup() {
 
 	//CollisionDetectionTest();
 	
-	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 1.7f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(11.11f, 0));
-	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 1.6f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
+	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 1.7f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(11.11f, -20));
+	//Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 1.6f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
 
 	return true;
 }
@@ -129,7 +129,7 @@ Circle* PhysicsApp::CreateCircle(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass,
 
 	m_physicsScene->AddActor(circle);
 
-	circle->ApplyForce(a_force);
+	circle->ApplyForce(a_force, circle->GetPosition());
 
 	return circle;
 }
@@ -147,13 +147,15 @@ void PhysicsApp::CreatePlane()
     // m_physicsScene->AddActor(testPlane3);
 	// m_physicsScene->AddActor(testPlane4);
 	// m_physicsScene->AddActor(testPlane5);
-}
 
-void PhysicsApp::CollisionDetectionTest()
-{
 	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
 
 	Plane* plane = new Plane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
 
 	m_physicsScene->AddActor(plane);
+}
+
+void PhysicsApp::CollisionDetectionTest()
+{
+	
 }

@@ -7,6 +7,7 @@ Circle::Circle(glm::vec2 a_position, glm::vec2 a_velocity, float a_mass, float a
 {
 	m_radius = a_radius;
 	m_colour = a_colour;
+	m_isKinematic = false;
 }
 
 Circle::~Circle()
