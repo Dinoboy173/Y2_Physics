@@ -48,7 +48,6 @@ protected:
 	glm::vec2 m_gravity;
 	float m_timeStep;
 	
-
 	/* Stores all the physics objects in the scene we create
 	   as well as functions that will add or remove objects */
 	std::vector<PhysicsObject*> m_actors;

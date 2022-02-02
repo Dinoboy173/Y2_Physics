@@ -40,15 +40,15 @@ bool PhysicsApp::startup() {
 	   but it will increase the processing time required. If it is too high
 	   it will cause the sim to stutter and reduce the stability */
 
-	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
+	m_physicsScene->SetGravity(glm::vec2(0, 0));
 	m_physicsScene->SetTimeStep(0.01f);
 
 	CreatePlane();
 
-	CollisionDetectionTest();
+	//CollisionDetectionTest();
 	
-	// rocket = CreateCircle(glm::vec2(0, 0), glm::vec2(0, 0), 50.f, 4.f, glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
-	// rocket2 = CreateCircle(glm::vec2(-40, 0), glm::vec2(0, 0), 50.f, 4.f, glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
+	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 1.7f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(11.11f, 0));
+	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 1.6f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
 
 	return true;
 }
@@ -153,12 +153,7 @@ void PhysicsApp::CollisionDetectionTest()
 {
 	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
 
-	Circle* ball1 = new Circle(glm::vec2(-20, 0), glm::vec2(0, 0), 10.f, 4.f, glm::vec4(1, 0, 0, 1));
-	Circle* ball2 = new Circle(glm::vec2(10, 0), glm::vec2(0, 0), 10.f, 4.f, glm::vec4(0, 0, 1, 1));
-
 	Plane* plane = new Plane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
 
-	m_physicsScene->AddActor(ball1);
-	m_physicsScene->AddActor(ball2);
 	m_physicsScene->AddActor(plane);
 }

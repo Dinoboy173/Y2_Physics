@@ -11,6 +11,9 @@ public:
 
 	virtual void FixedUpdate(glm::vec2 a_gravity, float a_timeStep);
 	virtual void Debug() { std::cout << "position: " << m_positon.x << ', ' << m_positon.y << std::endl; }
+	
+	void ResolveCollision(RigidBody* a_actor2);
+
 	virtual bool CheckCollision(PhysicsObject* pOther) = 0;
 
 	void ApplyForce(glm::vec2 a_force);
@@ -20,6 +23,8 @@ public:
 	glm::vec2 GetVelocity() { return m_velocity; }
 	float GetRotation() { return m_rotation; }
 	float GetMass() { return m_mass; }
+
+	float GetKineticEnergy();
 
 	void SetMass(float a_mass) { m_mass = a_mass; }
 

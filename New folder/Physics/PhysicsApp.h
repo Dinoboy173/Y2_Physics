@@ -26,9 +26,6 @@ protected:
 
 	PhysicsScene* m_physicsScene;
 
-	//Circle* rocket;
-	//Circle* rocket2;
-
 	float timer = 0.f;
 	float timerReset = 0.1f;
 
