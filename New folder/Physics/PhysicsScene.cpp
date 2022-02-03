@@ -6,6 +6,7 @@
 #include "RigidBody.h"
 #include "Circle.h"
 #include "Plane.h"
+#include "Player.h"
 
 PhysicsScene::PhysicsScene() :
 	m_timeStep(0.01f),m_gravity(glm::vec2(0, 0))
@@ -66,9 +67,10 @@ void PhysicsScene::Draw()
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 static fn collisionFunctionArray[] =
 {
-	PhysicsScene::Plane2Plane,  PhysicsScene::Plane2Circle,  PhysicsScene::Plane2Box,
-	PhysicsScene::Circle2Plane, PhysicsScene::Circle2Circle, PhysicsScene::Circle2Box,
-	PhysicsScene::Box2Plane,    PhysicsScene::Box2Circle,    PhysicsScene::Box2Box,
+	PhysicsScene::Plane2Plane,  PhysicsScene::Plane2Circle,  PhysicsScene::Plane2Player,   PhysicsScene::Plane2Box,
+	PhysicsScene::Circle2Plane, PhysicsScene::Circle2Circle, PhysicsScene::Circle2Player, PhysicsScene::Circle2Box,
+	PhysicsScene::Player2Plane, PhysicsScene::Player2Circle, PhysicsScene::Player2Player, PhysicsScene::Player2Box,
+	PhysicsScene::Box2Plane,    PhysicsScene::Box2Circle,    PhysicsScene::Box2Player,    PhysicsScene::Box2Box,
 };
 
 void PhysicsScene::CheckForCollisions()
@@ -106,6 +108,30 @@ bool PhysicsScene::Plane2Plane(PhysicsObject* a_plane, PhysicsObject* a_otherPla
 bool PhysicsScene::Plane2Circle(PhysicsObject* a_plane, PhysicsObject* a_circle)
 {
 	return Circle2Plane(a_circle, a_plane);
+}
+
+bool PhysicsScene::Plane2Player(PhysicsObject* a_plane, PhysicsObject* a_player)
+{
+	Plane* plane = dynamic_cast<Plane*>(a_plane);
+	Player* player = dynamic_cast<Player*>(a_player);
+
+	// if this is successful then test for a collision
+
+	if (player != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->GetNormal();
+		float circleToPlane = glm::dot(player->GetPosition(), plane->GetNormal()) - plane->GetDistance();
+		float intersection = player->GetRadius() - circleToPlane;
+		float velocityOutOfThePlane = glm::dot(player->GetVelocity(), plane->GetNormal());
+		if (intersection > 0 && velocityOutOfThePlane < 0)
+		{
+			// We can set the circles respones
+			player->ApplyForce(-player->GetVelocity() * player->GetMass(), player->GetPosition());
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool PhysicsScene::Plane2Box(PhysicsObject* a_plane, PhysicsObject* a_box)
@@ -163,7 +189,74 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* a_circle, PhysicsObject* a_other
 	return false;
 }
 
+bool PhysicsScene::Circle2Player(PhysicsObject* a_circle, PhysicsObject* a_player)
+{
+	// Tries to cast the object to circle to circle
+	Circle* circle = dynamic_cast<Circle*>(a_circle);
+	Player* player = dynamic_cast<Player*>(a_player);
+
+	// If successful then test for collision
+	if (circle != nullptr && a_player != nullptr)
+	{
+		// Do the maths to change for the overlap
+		float dist = glm::distance(circle->GetPosition(), player->GetPosition());
+
+		// if the circles touch, reseolve the colluision.
+		float penetration = circle->GetRadius() + player->GetRadius() - dist;
+
+		if (penetration > 0)
+		{
+			circle->ResolveCollision(player, .5f * (circle->GetPosition() + player->GetPosition()));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool PhysicsScene::Circle2Box(PhysicsObject* a_circle, PhysicsObject* a_box)
+{
+	return false;
+}
+
+bool PhysicsScene::Player2Plane(PhysicsObject* a_player, PhysicsObject* a_plane)
+{
+	return Plane2Player(a_plane, a_player);
+}
+
+bool PhysicsScene::Player2Circle(PhysicsObject* a_player, PhysicsObject* a_circle)
+{
+	return Circle2Player(a_circle, a_player);
+}
+
+bool PhysicsScene::Player2Player(PhysicsObject* a_player, PhysicsObject* a_otherPlayer)
+{
+	// Tries to cast the object to circle to circle
+	Player* player1 = dynamic_cast<Player*>(a_player);
+	Player* player2 = dynamic_cast<Player*>(a_otherPlayer);
+
+	// If successful then test for collision
+	if (player1 != nullptr && player2 != nullptr)
+	{
+		// Do the maths to change for the overlap
+		float dist = glm::distance(player1->GetPosition(), player2->GetPosition());
+
+		// if the circles touch, reseolve the colluision.
+		float penetration = player1->GetRadius() + player2->GetRadius() - dist;
+
+		if (penetration > 0)
+		{
+			player1->ResolveCollision(player2, .5f * (player1->GetPosition() + player2->GetPosition()));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool PhysicsScene::Player2Box(PhysicsObject* a_player, PhysicsObject* a_box)
 {
 	return false;
 }
@@ -174,6 +267,11 @@ bool PhysicsScene::Box2Plane(PhysicsObject* a_box, PhysicsObject* a_plane)
 }
 
 bool PhysicsScene::Box2Circle(PhysicsObject* a_box, PhysicsObject* a_circle)
+{
+	return false;
+}
+
+bool PhysicsScene::Box2Player(PhysicsObject* a_box, PhysicsObject* a_player)
 {
 	return false;
 }

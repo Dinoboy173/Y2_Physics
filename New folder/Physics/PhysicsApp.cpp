@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Gizmos.h>
 #include <glm/ext.hpp>
+#include <Input.h>
 
 #include "PhysicsApp.h"
 #include "Texture.h"
@@ -8,6 +9,7 @@
 #include "Input.h"
 #include "Circle.h"
 #include "Plane.h"
+#include "Player.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -43,12 +45,12 @@ bool PhysicsApp::startup() {
 	m_physicsScene->SetGravity(glm::vec2(0, 0));
 	m_physicsScene->SetTimeStep(0.01f);
 
-	CreatePlane();
-
-	//CollisionDetectionTest();
+	Plane* plane = CreatePlane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
 	
 	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(20.f, 20.f));
 	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 4.f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(-20, 20.f));
+
+	m_player = CreatePlayer(glm::vec2(0, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(.5f, .5f, .5f, 1.f));
 
 	return true;
 }
@@ -65,40 +67,16 @@ void PhysicsApp::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	aie::Gizmos::clear();
-
-	// if (rocket->GetMass() > 1)
-	// {
-	// 	if (timer <= 0)
-	// 	{
-	// 		MoveRocket(rocket);
-	// 		//MoveRocket(rocket2);
-	// 		timer = timerReset;
-	// 	}
-	// 	else if (timer > 0)
-	// 		timer -= deltaTime;
-	// }
 	
 	m_physicsScene->Update(deltaTime);
 	m_physicsScene->Draw();
+
+	PlayerControl(m_player, input);
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 }
-
-// void PhysicsApp::MoveRocket(Circle* a_rocket)
-// {
-// 	Circle* fuel = CreateCircle(
-// 		a_rocket->GetPosition() - glm::vec2(0, 4.5f),
-// 		glm::vec2(0, 0),
-// 		1.f,
-// 		0.4f,
-// 		glm::vec4(0, 1, 0, 1),
-// 		glm::vec2(0, -1));
-// 
-// 	a_rocket->SetMass(rocket->GetMass() - 1.f);
-// 	a_rocket->ApplyForce(glm::vec2(0, 12.5f));
-// }
 
 void PhysicsApp::draw() {
 
@@ -123,6 +101,18 @@ void PhysicsApp::draw() {
 	m_2dRenderer->end();
 }
 
+void PhysicsApp::PlayerControl(Player* a_player, aie::Input* a_input)
+{
+	if (a_input->isKeyDown(aie::INPUT_KEY_W))
+		a_player->ApplyForce(glm::vec2(0, 5.f), a_player->GetPosition());
+	if (a_input->isKeyDown(aie::INPUT_KEY_A))
+		a_player->ApplyForce(glm::vec2(-5.f, 0), a_player->GetPosition());
+	if (a_input->isKeyDown(aie::INPUT_KEY_S))
+		a_player->ApplyForce(glm::vec2(0, -5.f), a_player->GetPosition());
+	if (a_input->isKeyDown(aie::INPUT_KEY_D))
+		a_player->ApplyForce(glm::vec2(5.f, 0), a_player->GetPosition());
+}
+
 Circle* PhysicsApp::CreateCircle(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass, float a_radius, glm::vec4 a_colour, glm::vec2 a_force)
 {
 	Circle* circle = new Circle(a_pos, a_vel, a_mass, a_radius, a_colour);
@@ -134,7 +124,7 @@ Circle* PhysicsApp::CreateCircle(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass,
 	return circle;
 }
 
-void PhysicsApp::CreatePlane()
+Plane* PhysicsApp::CreatePlane(glm::vec2 a_normal, float a_distToOrigin, glm::vec4 a_colour)
 {
 	// Plane* testPlane1 = new Plane(glm::vec2(1, 0), -40,  glm::vec4(0, 1, 0, 1)); // left
 	// Plane* testPlane2 = new Plane(glm::vec2(-1, 0), -40, glm::vec4(0, 1, 0, 1)); // right
@@ -148,14 +138,18 @@ void PhysicsApp::CreatePlane()
 	// m_physicsScene->AddActor(testPlane4);
 	// m_physicsScene->AddActor(testPlane5);
 
-	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
-
-	Plane* plane = new Plane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
+	Plane* plane = new Plane(a_normal, a_distToOrigin, a_colour);
 
 	m_physicsScene->AddActor(plane);
+
+	return plane;
 }
 
-void PhysicsApp::CollisionDetectionTest()
+Player* PhysicsApp::CreatePlayer(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass, float a_radius, glm::vec4 a_colour)
 {
-	
+	Player* player = new Player(a_pos, a_vel, a_mass, a_radius, a_colour);
+
+	m_physicsScene->AddActor(player);
+
+	return player;
 }
