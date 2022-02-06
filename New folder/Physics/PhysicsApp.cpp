@@ -42,12 +42,12 @@ bool PhysicsApp::startup() {
 	   but it will increase the processing time required. If it is too high
 	   it will cause the sim to stutter and reduce the stability */
 
-	m_physicsScene->SetGravity(glm::vec2(0, 0));
+	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
 	m_physicsScene->SetTimeStep(0.01f);
 
 	Plane* plane = CreatePlane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
 	
-	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 1, 1, 1), glm::vec2(20.f, 20.f));
+	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 0, 1, 1), glm::vec2(20.f, 20.f));
 	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 4.f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(-20, 20.f));
 
 	m_player = CreatePlayer(glm::vec2(0, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(.5f, .5f, .5f, 1.f));

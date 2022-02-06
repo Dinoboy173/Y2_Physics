@@ -1,7 +1,7 @@
 #pragma once
-#include "RigidBody.h"
+#include "Circle.h"
 
-class Player : public RigidBody
+class Player : public Circle
 {
 public:
 	Player(glm::vec2 a_position, glm::vec2 a_velocity, float a_mass, float a_radius, glm::vec4 a_colour);

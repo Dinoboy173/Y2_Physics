@@ -18,5 +18,8 @@ Circle::~Circle()
 
 void Circle::MakeGizmo()
 {
+	glm::vec2 end = glm::vec2(std::cos(m_rotation), std::sin(m_rotation)) * m_radius;
+
 	aie::Gizmos::add2DCircle(m_positon, m_radius, 12, m_colour);
+	aie::Gizmos::add2DLine(m_positon, m_positon + end, glm::vec4(1, 1, 1, 1));
 }

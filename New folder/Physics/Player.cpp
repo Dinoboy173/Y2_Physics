@@ -3,7 +3,7 @@
 #include <glm/ext.hpp>
 
 Player::Player(glm::vec2 a_position, glm::vec2 a_velocity, float a_mass, float a_radius, glm::vec4 a_colour) :
-	RigidBody(PLAYER, a_position, a_velocity, 0, a_mass)
+	Circle(a_position, a_velocity, a_mass, a_radius, a_colour)
 {
 	m_radius = a_radius;
 	m_colour = a_colour;
