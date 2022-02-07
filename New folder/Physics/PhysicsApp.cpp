@@ -16,7 +16,7 @@
 
 PhysicsApp::PhysicsApp()
 {
-
+	
 }
 
 PhysicsApp::~PhysicsApp()
@@ -105,10 +105,13 @@ void PhysicsApp::PlayerControl(Player* a_player, aie::Input* a_input)
 {
 	if (a_input->isKeyDown(aie::INPUT_KEY_W))
 		a_player->ApplyForce(glm::vec2(0, 5.f), a_player->GetPosition());
+
 	if (a_input->isKeyDown(aie::INPUT_KEY_A))
 		a_player->ApplyForce(glm::vec2(-5.f, 0), a_player->GetPosition());
+
 	if (a_input->isKeyDown(aie::INPUT_KEY_S))
 		a_player->ApplyForce(glm::vec2(0, -5.f), a_player->GetPosition());
+
 	if (a_input->isKeyDown(aie::INPUT_KEY_D))
 		a_player->ApplyForce(glm::vec2(5.f, 0), a_player->GetPosition());
 }

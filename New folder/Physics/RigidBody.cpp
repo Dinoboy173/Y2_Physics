@@ -1,6 +1,13 @@
 #include "RigidBody.h"
 #include <glm/glm.hpp>
+#include <Gizmos.h>
+#include <glm/ext.hpp>
 #include <iostream>
+#include <math.h>
+
+#include <string>
+#include <stdio.h>
+#include <ctype.h>
 
 RigidBody::RigidBody(
 	ShapeType a_shapeID, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_mass) :
@@ -71,4 +78,29 @@ float RigidBody::GetKineticEnergy()
 	float totalEnergy = (m_mass * glm::dot(m_velocity, m_velocity)) / 2;
 	
 	return totalEnergy;
+}
+
+float RigidBody::OpposingColour(float a_value)
+{
+	/* Take the numeric percent value entered and convert it to a whole number out of 255 and to a hex value.
+
+	If the percent entered is less than 7, add a leading 0 to the hex value, since it will be a single character hex value (0 - f), which we want to display as 00 - ff.
+	
+	Uppercase the hex value to make the formatting pretty.
+	
+	Update the Decimal and Hex input fields. */
+
+	float decimalValue = glm::round(a_value * 255 / 100);
+
+	if (a_value < 7)
+	{
+
+		auto hexValue = "0" + std::to_string(decimalValue);
+	}
+	else
+	{
+		auto hexValue = decimalValue
+	}
+
+	return 0.f;
 }
