@@ -34,7 +34,7 @@ void RigidBody::FixedUpdate(glm::vec2 a_gravity, float a_timeStep)
 	m_rotation += m_angularVelocity * a_timeStep;
 }
 
-void RigidBody::ResolveCollision(RigidBody* a_otherActor, glm::vec2 a_contact, glm::vec2* a_collisionNormal)
+void RigidBody::ResolveCollision(RigidBody* a_otherActor, glm::vec2 a_contact, glm::vec2* a_collisionNormal, float pen)
 {
 	/* We need to find the vector between their centers or use the provided
 	   directional force, and make sure it is normalised */

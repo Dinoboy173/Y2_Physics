@@ -13,7 +13,7 @@ public:
 	virtual void FixedUpdate(glm::vec2 a_gravity, float a_timeStep);
 	virtual void Debug() { std::cout << "position: " << m_positon.x << ', ' << m_positon.y << std::endl; }
 	
-	void ResolveCollision(RigidBody* a_otherActor, glm::vec2 a_contact, glm::vec2* a_collisionNormal = nullptr);
+	void ResolveCollision(RigidBody* a_otherActor, glm::vec2 a_contact, glm::vec2* a_collisionNormal = nullptr, float pen = 0);
 
 	void ApplyForce(glm::vec2 a_force, glm::vec2 a_contact);
 

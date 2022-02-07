@@ -221,17 +221,57 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* a_circle, PhysicsObject* a_other
 
 bool PhysicsScene::Circle2Box(PhysicsObject* a_circle, PhysicsObject* a_box)
 {
-	return false;
+	return Box2Circle(a_box, a_circle);
 }
 
 // =============================================== BOX ===============================================
 bool PhysicsScene::Box2Plane(PhysicsObject* a_box, PhysicsObject* a_plane)
 {
-	return false;
+	return Plane2Box(a_plane, a_box);
 }
 
 bool PhysicsScene::Box2Circle(PhysicsObject* a_box, PhysicsObject* a_circle)
 {
+	Circle* circle = dynamic_cast<Circle*>(a_circle);
+	Box* box = dynamic_cast<Box*>(a_box);
+
+	if (box != nullptr && circle != nullptr)
+	{
+		// Transform the circle into the box's coordinate space
+		glm::vec2 circlePosWorld = circle->GetPosition() - box->GetPosition();
+		glm::vec2 circlePosBox = glm::vec2(glm::dot(circlePosWorld, box->GetLocalX()), glm::dot(circlePosBox, box->GetLocalY()));
+
+		/* Then find the closest point to the circle center on the box, do this by clamping the coordinate in the box-space
+		   to the box's extents */
+		glm::vec2 closestPointOnBox = circlePosBox;
+		glm::vec2 extents = box->GetExtents();
+
+		if (closestPointOnBox.x < -extents.x)
+			closestPointOnBox.x = -extents.x;
+		if (closestPointOnBox.x > extents.x)
+			closestPointOnBox.x = extents.x;
+		if (closestPointOnBox.y < -extents.y)
+			closestPointOnBox.y = -extents.y;
+		if (closestPointOnBox.y > extents.y)
+			closestPointOnBox.y = extents.y;
+
+		// Finally, convert back to world coordinates
+		glm::vec2 closestPointInBoxWorld = box->GetPosition() + closestPointOnBox.x * box->GetLocalX() + closestPointOnBox.y * box->GetLocalY();
+
+		glm::vec2 circleToBox = circle->GetPosition() - closestPointInBoxWorld;
+
+		float penetration = circle->GetRadius() - glm::length(circleToBox);
+
+		if (penetration > 0)
+		{
+			glm::vec2 direction = glm::normalize(circleToBox);
+			glm::vec2 contact = closestPointInBoxWorld;
+			box->ResolveCollision(circle, contact, &direction);
+
+			return true;
+		}
+	}
+
 	return false;
 }
 

@@ -27,7 +27,6 @@ PhysicsApp::~PhysicsApp()
 
 bool PhysicsApp::startup() // game manager
 {
-
 	// Increase the 2d line count to maximise the number of objects we can draw
 
 	aie::Gizmos::create(255U, 255U, 65535U, 65535U);
@@ -47,14 +46,15 @@ bool PhysicsApp::startup() // game manager
 	m_physicsScene->SetGravity(glm::vec2(0, 0));
 	m_physicsScene->SetTimeStep(0.01f);
 
-	// Plane* plane = CreatePlane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
+	Plane* plane = CreatePlane(glm::vec2(0, 1), -30, glm::vec4(0, 1, 0, 1));
 
-	Box* box = CreateBox(glm::vec2(0, 0), glm::vec2(0, 0), 0, 4.f, 8.f, 4.f, glm::vec4(0, 0, 1, 1), glm::vec2(0, 0));
+	Box* box = CreateBox(glm::vec2(0, 0), glm::vec2(0, 0), 1, 4.f, 8.f, 4.f, glm::vec4(0, 0, 1, 1), glm::vec2(0, 0));
 	
-	Circle* ball1 = CreateCircle(glm::vec2(-20, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 0, 0.54f, 1), glm::vec2(0, 0));
-	Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 4.f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
+	Circle* ball1 = CreateCircle(glm::vec2(0, 20), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(1, 0, 0.54f, 1), glm::vec2(0, -50));
+	// Circle* ball2 = CreateCircle(glm::vec2(10, 0),  glm::vec2(0, 0), 4.f, 4.f, glm::vec4(0, 1, 0, 1), glm::vec2(0, 0));
 
-	// m_player = CreatePlayer(glm::vec2(0, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(.5f, .5f, .5f, 1.f));
+	// m_player = CreatePlayer(glm::vec2(10, 0), glm::vec2(0, 0), 4.f, 4.f, glm::vec4(.5f, .5f, .5f, 1.f)); // cirlce
+	// m_player = CreatePlayer(glm::vec2(-10, 0), glm::vec2(0, 0), 0, 4, 4, 8, glm::vec4(0, 0, 1, 1)); // box
 
 	return true;
 }
@@ -155,6 +155,15 @@ Plane* PhysicsApp::CreatePlane(glm::vec2 a_normal, float a_distToOrigin, glm::ve
 Player* PhysicsApp::CreatePlayer(glm::vec2 a_pos, glm::vec2 a_vel, float a_mass, float a_radius, glm::vec4 a_colour)
 {
 	Player* player = new Player(a_pos, a_vel, a_mass, a_radius, a_colour);
+
+	m_physicsScene->AddActor(player);
+
+	return player;
+}
+
+Player* PhysicsApp::CreatePlayer(glm::vec2 a_pos, glm::vec2 a_vel, float a_rot, float a_mass, float a_width, float a_height, glm::vec4 a_colour)
+{
+	Player* player = new Player(a_pos, a_vel, a_rot, a_mass, a_width, a_height, a_colour);
 
 	m_physicsScene->AddActor(player);
 
