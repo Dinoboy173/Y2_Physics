@@ -18,6 +18,7 @@ RigidBody::RigidBody(
 	m_rotation = a_rotation;
 	m_mass = a_mass;
 	m_elasticity = 1;
+	m_angularVelocity = 0;
 }
 
 RigidBody::~RigidBody()
@@ -82,25 +83,23 @@ float RigidBody::GetKineticEnergy()
 
 float RigidBody::OpposingColour(float a_value)
 {
-	/* Take the numeric percent value entered and convert it to a whole number out of 255 and to a hex value.
+	// percentile to rgb
+	float rgbValue = glm::round(a_value * 255);
 
-	If the percent entered is less than 7, add a leading 0 to the hex value, since it will be a single character hex value (0 - f), which we want to display as 00 - ff.
-	
-	Uppercase the hex value to make the formatting pretty.
-	
-	Update the Decimal and Hex input fields. */
+	// convert rgb to hex values
+	float fHexValue = rgbValue / 16;
+	int hex1Value = glm::round(fHexValue);
+	int hex2Value = (fHexValue - hex1Value) * 16;
 
-	float decimalValue = glm::round(a_value * 255 / 100);
+	// invert hex values
+	hex1Value = 15 - hex1Value;
+	hex2Value = 15 - hex2Value;
 
-	if (a_value < 7)
-	{
+	// convert hex values back into rgb
+	rgbValue = (hex1Value * 16) + hex2Value;
 
-		auto hexValue = "0" + std::to_string(decimalValue);
-	}
-	else
-	{
-		auto hexValue = decimalValue
-	}
+	// convert rgb back into percentile
+	float percentile = rgbValue / 255;
 
-	return 0.f;
+	return percentile;
 }

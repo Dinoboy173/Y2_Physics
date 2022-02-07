@@ -46,7 +46,7 @@ void Box::FixedUpdate(glm::vec2 a_gravity, float a_timeStep)
 	float cs = cosf(m_rotation);
 	float sn = sinf(m_rotation);
 	m_localX = glm::normalize(glm::vec2(cs, sn));
-	m_localX = glm::normalize(glm::vec2(-sn, cs));
+	m_localY = glm::normalize(glm::vec2(-sn, cs));
 }
 
 void Box::MakeGizmo()
@@ -59,9 +59,4 @@ void Box::MakeGizmo()
 
 	aie::Gizmos::add2DTri(p1, p2, p4, m_colour);
 	aie::Gizmos::add2DTri(p1, p4, p3, m_colour);
-}
-
-bool Box::CheckCorners(const Box& a_box, glm::vec2& a_contact, int& a_numContact, float& a_pen, glm::vec2& a_edgeNormal)
-{
-	return false;
 }

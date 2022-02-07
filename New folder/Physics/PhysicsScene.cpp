@@ -1,11 +1,14 @@
 #include <list>
 #include <iostream>
+#include <algorithm>
+#include <glm/ext.hpp>
 
 #include "PhysicsScene.h"
 #include "PhysicsObject.h"
 #include "RigidBody.h"
 #include "Circle.h"
 #include "Plane.h"
+#include "Box.h"
 #include "Player.h"
 
 PhysicsScene::PhysicsScene() :
@@ -112,6 +115,54 @@ bool PhysicsScene::Plane2Circle(PhysicsObject* a_plane, PhysicsObject* a_circle)
 
 bool PhysicsScene::Plane2Box(PhysicsObject* a_plane, PhysicsObject* a_box)
 {
+	Plane* plane = dynamic_cast<Plane*>(a_plane);
+	Box* box = dynamic_cast<Box*>(a_box);
+
+	// When the arguments return true collision test
+	if (box != nullptr && plane != nullptr)
+	{
+		int numContacts = 0;
+		glm::vec2 contact(0, 0);
+		float contactV = 0;
+
+		glm::vec2 planeOrigin = plane->GetNormal() * plane->GetDistance();
+
+		// Check all four corners of the box for if any have touched the plane
+		for (float x = -box->GetExtents().x; x < box->GetWidth(); x += box->GetWidth())
+		{
+			for (float y = -box->GetExtents().y; y < box->GetHeight(); y += box->GetHeight())
+			{
+				// Next, grab the position of the corner in world space
+				glm::vec2 p = box->GetPosition() + x * box->GetLocalX() + y * box->GetLocalY();
+				float distanceFromPlane = glm::dot(p - planeOrigin, plane->GetNormal());
+
+				// This is the total velocity of the box's points in world space
+				glm::vec2 displacement = x * box->GetLocalX() + y * box->GetLocalY();
+				glm::vec2 pointVelocity = box->GetVelocity() + box->GetAngularVelocity() * glm::vec2(-displacement.y, displacement.x);
+
+				// This is the component of the point velocity into the plane
+				float velocityIntoPlane = glm::dot(pointVelocity, plane->GetNormal());
+
+				// While our box is penetrating the plane...
+				if (distanceFromPlane < 0 && velocityIntoPlane <= 0)
+				{
+					numContacts++;
+					contact += p;
+					contactV += velocityIntoPlane;
+				}
+			}
+		}
+
+		// We have a hit if greater then 0, typically only 1 to 2 corners will collide
+		if (numContacts > 0)
+		{
+			// 
+
+			plane->ResolvePlaneCollision(box, contact / (float)numContacts);
+			return true;
+		}
+	}
+
 	return false;
 }
 

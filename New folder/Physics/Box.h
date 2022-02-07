@@ -15,8 +15,8 @@ public:
 
 	bool CheckCorners(const Box& a_box, glm::vec2& a_contact, int& a_numContact, float& a_pen, glm::vec2& a_edgeNormal);
 
-	float GetWidth() { return m_extents.x * 2; }
-	float GetHeight() { return m_extents.y * 2; }
+	float GetWidth() { return (m_extents.x * 2); }
+	float GetHeight() { return (m_extents.y * 2); }
 	glm::vec2 GetExtents() { return m_extents; }
 	glm::vec2 GetLocalX() { return m_localX; }
 	glm::vec2 GetLocalY() { return m_localY; }
